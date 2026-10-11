@@ -22,7 +22,7 @@ import "fmt"
 // Для расчётов используй float64. Позже изучим, почему для настоящих денежных операций лучше использовать целые значения минимальных денежных единиц или decimal-библиотеки.
 func main() {
 	productName := "Gaming Keyboard"
-	price := 89.99
+	price := 100.0
 	quantity := 3
 	const discount = 15.0
 	const vat = 20.0
@@ -37,8 +37,8 @@ func main() {
 	fmt.Printf("Price: $%.2f\n", price)
 	fmt.Printf("Quantity: %d\n", quantity)
 	fmt.Printf("Subtotal: $%.2f\n", subtotal)
-	fmt.Printf("Discount ($%.f): %.2f\n", discount, discountPercent)
+	fmt.Printf("Discount (%.f): $%.2f\n", discount, discountPercent)
 	fmt.Printf("After discount: $%.2f\n", afterDiscount)
-	fmt.Printf("VAT (%.f%%): %.2f\n", vat, vatPercent)
-	fmt.Printf("Total: %.2f\n", total)
+	fmt.Printf("VAT (%.f%%): $%.2f\n", vat, vatPercent)
+	fmt.Printf("Total: $%.2f\n", total)
 }
