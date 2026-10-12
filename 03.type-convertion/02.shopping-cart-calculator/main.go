@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 // 02. Shopping Cart Calculator
 //
@@ -8,10 +11,6 @@ import "fmt"
 // для интернет-магазина.
 //
 // Исходные данные:
-// productName := "Gaming Keyboard"
-// price := "89.99"
-// quantity := "3"
-// discount := 15
 //
 // Задание:
 // 1. Преобразуй price в float64.
@@ -34,5 +33,27 @@ import "fmt"
 // Total: $229.47
 
 func main() {
-	_ = fmt.Sprintf
+	productName := "Gaming Keyboard"
+	price := "89.99"
+	quantity := "3"
+	discount := 16
+
+	priceFloat, err := strconv.ParseFloat(price, 64)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	quantityInt, err := strconv.Atoi(quantity)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	discountFloat := float64(discount)
+	totalPrice := priceFloat * float64(quantityInt)
+	discountPrice := (totalPrice * discountFloat) / 100
+	discountPercent := strconv.FormatFloat(discountFloat, 'f', 0, 64)
+	totalPriceWithDiscount := totalPrice - discountPrice
+	totalString := strconv.FormatFloat(totalPriceWithDiscount, 'f', 2, 64)
+	result := fmt.Sprintf("Product: %s\n Price: %.2f\n Quantity: %d\n Subtotal: $%.2f\n Discount(%s%%): $%.2f\n Total: $%s", productName, priceFloat, quantityInt, totalPrice, discountPercent, discountPrice, totalString)
+	fmt.Println(result)
 }
