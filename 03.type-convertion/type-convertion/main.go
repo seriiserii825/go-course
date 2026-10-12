@@ -1,7 +1,9 @@
 package main
 
-import "strconv"
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 func main() {
 	// int → string
