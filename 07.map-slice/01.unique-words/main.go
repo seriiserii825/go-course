@@ -19,11 +19,11 @@ func main() {
 		"Anna", "Petr", "Max", "Olga", "Ivan",
 		"Serii", "Petr", "Alex", "Anna", "Nixon",
 	}
-	UniqueWords(words)
+	fmt.Println(UniqueWords(words))
+	fmt.Println(WordCount(words))
 }
 
 func UniqueWords(words []string) []string {
-	fmt.Println(words)
 	uniquesWords := []string{}
 	wordsMap := map[string]bool{}
 
@@ -34,7 +34,13 @@ func UniqueWords(words []string) []string {
 		}
 		wordsMap[word] = true
 	}
-	fmt.Println(wordsMap)
-	fmt.Println(uniquesWords)
 	return uniquesWords
+}
+
+func WordCount(words []string) map[string]int {
+	counts := map[string]int{}
+	for _, word := range words {
+		counts[word] = counts[word] + 1
+	}
+	return counts
 }
