@@ -27,6 +27,8 @@ func main() {
 	userName := "John"
 	johnGrade := AverageGrade(grades, userName)
 	fmt.Printf("Average %s: %.2f\n", userName, johnGrade)
+	topStudent := TopStudent(grades)
+	fmt.Println(topStudent)
 }
 
 func AddGrade(grades map[string][]int, name string, grade int) {
@@ -49,4 +51,19 @@ func AverageGrade(grades map[string][]int, name string) float64 {
 		sum += g
 	}
 	return float64(sum) / float64(userGradesLen)
+}
+
+// - Функция `TopStudent(grades map[string][]int) string` — имя студента с наибольшим средним баллом.
+func TopStudent(grades map[string][]int) string {
+	topAvg := 0.0
+	topName := ""
+
+	for key, _ := range grades {
+		avgGrade := AverageGrade(grades, key)
+		if topAvg <= avgGrade {
+			topAvg = avgGrade
+			topName = key
+		}
+	}
+	return topName
 }
