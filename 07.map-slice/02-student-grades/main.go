@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // # Проект 2: Журнал оценок студентов
 // ## Задача
@@ -29,6 +32,8 @@ func main() {
 	fmt.Printf("Average %s: %.2f\n", userName, johnGrade)
 	topStudent := TopStudent(grades)
 	fmt.Println(topStudent)
+	sortedNames := SortedNames(grades)
+	fmt.Println(sortedNames)
 }
 
 func AddGrade(grades map[string][]int, name string, grade int) {
@@ -66,4 +71,16 @@ func TopStudent(grades map[string][]int) string {
 		}
 	}
 	return topName
+}
+
+// - Функция `SortedNames(grades map[string][]int) []string` — имена студентов по алфавиту.
+func SortedNames(grades map[string][]int) []string {
+	gradeNames := []string{}
+
+	for key, _ := range grades {
+		gradeNames = append(gradeNames, key)
+	}
+
+	sort.Strings(gradeNames)
+	return gradeNames
 }
