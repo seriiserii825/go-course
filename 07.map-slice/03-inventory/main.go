@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+
+	"github.com/fatih/color"
+)
 
 // Смоделировать простой склад товаров через `map[string]int`, где ключ — название товара, значение — количество на складе.
 // Реализовать функции:
@@ -30,6 +35,10 @@ func main() {
 	printStock(stock)
 	receive(stock, "Apples", 3)
 	printStock(stock)
+	ship(stock, "Mangoes", 4)
+	printStock(stock)
+	lowStockNames := lowStock(stock, 19)
+	fmt.Println(lowStockNames)
 }
 func printStock(stock map[string]int) {
 	fmt.Println(stock)
@@ -37,4 +46,25 @@ func printStock(stock map[string]int) {
 
 func receive(stock map[string]int, name string, qty int) {
 	stock[name] += qty
+}
+
+func ship(stock map[string]int, name string, qty int) {
+	nameQty := stock[name]
+	if nameQty < qty {
+		color.Red("Too many qty, have just %d\n", nameQty)
+		return
+	}
+	stock[name] -= qty
+}
+func lowStock(stock map[string]int, threshold int) []string {
+	stockNames := []string{}
+
+	for key, value := range stock {
+		if value < threshold {
+			stockNames = append(stockNames, key)
+		}
+	}
+
+	sort.Strings(stockNames)
+	return stockNames
 }
