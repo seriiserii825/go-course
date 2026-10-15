@@ -35,10 +35,12 @@ func main() {
 	printStock(stock)
 	receive(stock, "Apples", 3)
 	printStock(stock)
-	ship(stock, "Mangoes", 4)
+	ship(stock, "Mangoes", 5)
 	printStock(stock)
 	lowStockNames := lowStock(stock, 19)
 	fmt.Println(lowStockNames)
+	removeEmpty(stock)
+	printStock(stock)
 }
 func printStock(stock map[string]int) {
 	fmt.Println(stock)
@@ -67,4 +69,11 @@ func lowStock(stock map[string]int, threshold int) []string {
 
 	sort.Strings(stockNames)
 	return stockNames
+}
+func removeEmpty(stock map[string]int) {
+	for key, value := range stock {
+		if value == 0 {
+			delete(stock, key)
+		}
+	}
 }
