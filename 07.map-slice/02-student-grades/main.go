@@ -24,6 +24,9 @@ func main() {
 	fmt.Println(grades)
 	AddGrade(grades, "Fill", 9)
 	fmt.Println(grades)
+	userName := "John"
+	johnGrade := AverageGrade(grades, userName)
+	fmt.Printf("Average %s: %.2f\n", userName, johnGrade)
 }
 
 func AddGrade(grades map[string][]int, name string, grade int) {
@@ -33,4 +36,17 @@ func AddGrade(grades map[string][]int, name string, grade int) {
 	} else {
 		grades[name] = append(grades[name], grade)
 	}
+}
+
+func AverageGrade(grades map[string][]int, name string) float64 {
+	userGrades := grades[name]
+	userGradesLen := len(userGrades)
+	if userGradesLen == 0 {
+		return 0
+	}
+	sum := 0
+	for _, g := range userGrades {
+		sum += g
+	}
+	return float64(sum) / float64(userGradesLen)
 }
