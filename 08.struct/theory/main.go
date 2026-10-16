@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/fatih/color"
+)
 
 type User struct {
 	Name        string
@@ -10,62 +14,76 @@ type User struct {
 	Rating      float64
 }
 
+func NewUser(name string, age int, phoneNumber string, isClose bool, rating float64) User {
+	if name == "" || age <= 0 || age >= 100 || phoneNumber == "" || rating < 0 || rating > 10 {
+		return User{}
+	} else {
+		return User{
+			Name:        name,
+			Age:         age,
+			PhoneNumber: phoneNumber,
+			IsClose:     isClose,
+			Rating:      rating,
+		}
+	}
+}
+
 func (user User) Greeting() {
 	fmt.Println("My name is", user.Name)
 	fmt.Println("I am", user.Age, "years old")
 	fmt.Println("My phone number is", user.PhoneNumber)
 }
 
-func (user *User) SetName(name string) {
+func (user *User) ChangeName(name string) {
 	if name != "" {
 		user.Name = name
 	} else {
-		fmt.Println("Name is empty")
+		color.Red("Name is empty")
 	}
 }
 
-func (user *User) SetAge(age int) {
+func (user *User) ChangeAge(age int) {
 	if age > 0 && age < 100 {
 		user.Age = age
 	} else {
-		fmt.Println("Age is not valid")
+		color.Red("Age is not valid")
 	}
 }
 
-func (user *User) SetPhoneNumber(phoneNumber string) {
+func (user *User) ChangePhoneNumber(phoneNumber string) {
 	if phoneNumber != "" {
 		user.PhoneNumber = phoneNumber
 	} else {
-		fmt.Println("Phone number is empty")
+		color.Red("Phone number is empty")
 	}
 }
 
-func (user *User) SetIsClose(isClose bool) {
-	user.IsClose = isClose
+func (user *User) CloseAccount() {
+	user.IsClose = true
+}
+func (user *User) OpenAccount() {
+	user.IsClose = false
 }
 
-func (user *User) SetRating(rating float64) {
+func (user *User) RatingUp(rating float64) {
 	if rating >= 0 && user.Rating+rating <= 10 {
 		user.Rating = rating
 	} else {
-		fmt.Println("Rating is not valid, it should be between 0 and 10")
+		color.Red("Rating is not valid, it should be between 0 and 10")
+	}
+}
+
+func (user *User) Ratingdown(rating float64) {
+	if rating >= 0 && user.Rating-rating >= 0 {
+		user.Rating = rating
+	} else {
+		color.Red("Rating is not valid, it should be between 0 and 10")
 	}
 }
 
 func main() {
-	user := User{
-		Name:        "Serii",
-		Age:         64,
-		PhoneNumber: "+37360562168",
-		IsClose:     true,
-		Rating:      4.5,
-	}
-	fmt.Println("User", user)
-	user.Greeting()
-	user.SetName("John")
-	user.SetAge(30)
-	user.SetPhoneNumber("+1234567890")
-	user.SetIsClose(false)
-	user.SetRating(2.5)
+	user := NewUser("John", 25, "123-456-7890", false, 8.5)
 	fmt.Println("user", user)
+	user2 := NewUser("Jane", 30, "098-765-4321", false, 3.0)
+	fmt.Println("user2", user2)
 }
