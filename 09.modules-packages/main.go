@@ -2,18 +2,14 @@ package main
 
 import (
 	"fmt"
-	"study/user"
+
+	"github.com/k0kubun/pp/v3"
+	"github.com/seriiserii825/go-course/09.modules-packages/user"
 )
 
 func main() {
 	u := user.NewUser("Alice", 30)
 	fmt.Println(u, "u")
 
-	u.SetName("Bob")
-	u.SetAge(25)
-	fmt.Println(u, "u")
-	name := u.GetName()
-	age := u.GetAge()
-	fmt.Println(name, "name")
-	fmt.Println(age, "age")
+	pp.Println(u)
 }
