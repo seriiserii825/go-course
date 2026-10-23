@@ -37,11 +37,23 @@ func main() {
 		utils.PrintErrorMessage(fmt.Sprintf("No products found with price >= %.2f", minPrice))
 	}
 
-	moreExpensiveProduct := inventory.GetMoreExpensiveProduct(products)
-	utils.PrintHeader("More Expensive product:")
-	pp.Println(moreExpensiveProduct)
+	moreExpensiveProduct, ok := inventory.GetMoreExpensiveProduct(products)
+	if ok {
+		utils.PrintHeader("More Expensive product:")
+		pp.Println(moreExpensiveProduct)
+	} else {
+		utils.PrintErrorMessage("No products found in the inventory")
+	}
 
-	lessExpensiveProduct := inventory.GetLessExpensiveProduct(products)
-	utils.PrintHeader("Less Expensive product:")
-	pp.Println(lessExpensiveProduct)
+	lessExpensiveProduct, ok := inventory.GetLessExpensiveProduct(products)
+	if ok {
+		utils.PrintHeader("Less Expensive product:")
+		pp.Println(lessExpensiveProduct)
+	} else {
+		utils.PrintErrorMessage("No products found in the inventory")
+	}
+
+	storeTotalPrice := inventory.GetStoreTotalPrice(products)
+	utils.PrintHeader("Store total price: ")
+	fmt.Printf("%.2f$\n", storeTotalPrice)
 }
