@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/k0kubun/pp/v3"
 	"github.com/seriiserii825/go-course/homework/slice-map-struct/inventory"
 	"github.com/seriiserii825/go-course/homework/slice-map-struct/models"
@@ -17,7 +19,12 @@ func main() {
 	}
 
 	inventory.PrintProducts(products)
-	product2 := inventory.SearchProductById(products, 2)
-	utils.PrintHeader("Product with ID 2:")
-	pp.Println(product2)
+	searchedProductId := 3
+	product2 := inventory.SearchProductById(products, searchedProductId)
+	if product2 != nil {
+		utils.PrintHeader(fmt.Sprintf("Product with ID %d:", product2.ID))
+		pp.Println(product2)
+	} else {
+		utils.PrintErrorMessage(fmt.Sprintf("Product with ID %d not found", searchedProductId))
+	}
 }

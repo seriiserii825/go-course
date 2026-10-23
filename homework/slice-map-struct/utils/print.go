@@ -1,6 +1,10 @@
 package utils
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/fatih/color"
+)
 
 func PrintLine() {
 	fmt.Println("--------------------------------------------------")
@@ -8,6 +12,12 @@ func PrintLine() {
 
 func PrintHeader(header string) {
 	fmt.Println("--------------------------------------------------")
-	fmt.Println(header)
+	color.Green(header)
+	fmt.Println("--------------------------------------------------")
+}
+
+func PrintErrorMessage(message string) {
+	fmt.Println("--------------------------------------------------")
+	color.Red("Error: %s\n", message)
 	fmt.Println("--------------------------------------------------")
 }
