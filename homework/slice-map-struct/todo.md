@@ -24,15 +24,15 @@ product-inventory/
 
 ### 1. Модель товара — models/product.go
 
-- [ ] Создать `struct Product`.
-- [ ] Добавить поля: `ID`, `Name`, `Price`, `Quantity`, `Category`.
-- [ ] Подобрать подходящие типы данных.
+- [x] Создать `struct Product`.
+- [x] Добавить поля: `ID`, `Name`, `Price`, `Quantity`, `Category`.
+- [x] Подобрать подходящие типы данных.
 
 ### 2. Список товаров — inventory/products.go
 
-- [ ] Создать slice из 5 товаров в `main.go`.
-- [ ] Создать функцию вывода всех товаров.
-- [ ] Использовать `for range` для перебора.
+- [x] Создать slice из 5 товаров в `main.go`.
+- [x] Создать функцию вывода всех товаров.
+- [x] Использовать `for range` для перебора.
 
 ### 3. Поиск и фильтрация — inventory/search.go
 

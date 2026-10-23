@@ -1,8 +1,10 @@
 package main
 
 import (
+	"github.com/k0kubun/pp/v3"
 	"github.com/seriiserii825/go-course/homework/slice-map-struct/inventory"
 	"github.com/seriiserii825/go-course/homework/slice-map-struct/models"
+	"github.com/seriiserii825/go-course/homework/slice-map-struct/utils"
 )
 
 func main() {
@@ -15,4 +17,7 @@ func main() {
 	}
 
 	inventory.PrintProducts(products)
+	product2 := inventory.SearchProductById(products, 2)
+	utils.PrintHeader("Product with ID 2:")
+	pp.Println(product2)
 }

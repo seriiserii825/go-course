@@ -10,3 +10,12 @@ func PrintProducts(products []models.Product) {
 		pp.Println(product)
 	}
 }
+
+func SearchProductById(products []models.Product, id int) *models.Product {
+	for i, _ := range products {
+		if products[i].ID == id {
+			return &products[i]
+		}
+	}
+	return nil
+}
