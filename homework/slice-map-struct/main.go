@@ -1,18 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"github.com/seriiserii825/go-course/homework/slice-map-struct/inventory"
+	"github.com/seriiserii825/go-course/homework/slice-map-struct/models"
+)
 
-// Создай CLI-программу, которая:
-// Объявляет struct Product с полями ID, Name, Price, Quantity, Category.
-// Создаёт slice из 5 товаров.
-// Выводит все товары через for range.
-// Находит товар по ID.
-// Фильтрует товары дороже $100.
-// Находит самый дорогой и самый дешёвый товар.
-// Считает общую стоимость склада (Price * Quantity).
-// Группирует товары по категориям через map[string][]Product.
-// Подсчитывает количество товаров в каждой категории через map[string]int.
-// Добавляет новый товар и удаляет существующий по ID.
-// Условия: Используй отдельные функции для операций. Не используй сторонние библиотеки.
 func main() {
+	products := []models.Product{
+		{ID: 1, Name: "Product 1", Price: 10.0, Quantity: 5, Category: "Category A"},
+		{ID: 2, Name: "Product 2", Price: 20.0, Quantity: 3, Category: "Category B"},
+		{ID: 3, Name: "Product 3", Price: 15.0, Quantity: 8, Category: "Category A"},
+		{ID: 4, Name: "Product 4", Price: 30.0, Quantity: 2, Category: "Category C"},
+		{ID: 5, Name: "Product 5", Price: 25.0, Quantity: 6, Category: "Category B"},
+	}
+
+	inventory.PrintProducts(products)
 }
