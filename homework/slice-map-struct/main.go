@@ -27,4 +27,13 @@ func main() {
 	} else {
 		utils.PrintErrorMessage(fmt.Sprintf("Product with ID %d not found", searchedProductId))
 	}
+
+	minPrice := 100.0
+	filteredProducts := inventory.FilterByPriceMin(products, minPrice)
+	if len(filteredProducts) > 0 {
+		utils.PrintHeader(fmt.Sprintf("Products with price >= %.2f, Count: %d", minPrice, len(filteredProducts)))
+		inventory.PrintProducts(filteredProducts)
+	} else {
+		utils.PrintErrorMessage(fmt.Sprintf("No products found with price >= %.2f", minPrice))
+	}
 }
