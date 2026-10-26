@@ -1,12 +1,8 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/k0kubun/pp/v3"
-	"github.com/seriiserii825/go-course/homework/slice-map-struct/inventory"
+	"github.com/seriiserii825/go-course/homework/slice-map-struct/menu"
 	"github.com/seriiserii825/go-course/homework/slice-map-struct/models"
-	"github.com/seriiserii825/go-course/homework/slice-map-struct/utils"
 )
 
 func main() {
@@ -18,42 +14,10 @@ func main() {
 		{ID: 5, Name: "Product 5", Price: 25.0, Quantity: 6, Category: "Category B"},
 	}
 
-	inventory.PrintProducts(products)
-	searchedProductId := 3
-	product2 := inventory.SearchProductById(products, searchedProductId)
-	if product2 != nil {
-		utils.PrintHeader(fmt.Sprintf("Product with ID %d:", product2.ID))
-		pp.Println(product2)
-	} else {
-		utils.PrintErrorMessage(fmt.Sprintf("Product with ID %d not found", searchedProductId))
-	}
-
-	minPrice := 100.0
-	filteredProducts := inventory.FilterByPriceMin(products, minPrice)
-	if len(filteredProducts) > 0 {
-		utils.PrintHeader(fmt.Sprintf("Products with price >= %.2f, Count: %d", minPrice, len(filteredProducts)))
-		inventory.PrintProducts(filteredProducts)
-	} else {
-		utils.PrintErrorMessage(fmt.Sprintf("No products found with price >= %.2f", minPrice))
-	}
-
-	moreExpensiveProduct, ok := inventory.GetMoreExpensiveProduct(products)
-	if ok {
-		utils.PrintHeader("More Expensive product:")
-		pp.Println(moreExpensiveProduct)
-	} else {
-		utils.PrintErrorMessage("No products found in the inventory")
-	}
-
-	lessExpensiveProduct, ok := inventory.GetLessExpensiveProduct(products)
-	if ok {
-		utils.PrintHeader("Less Expensive product:")
-		pp.Println(lessExpensiveProduct)
-	} else {
-		utils.PrintErrorMessage("No products found in the inventory")
-	}
-
-	storeTotalPrice := inventory.GetStoreTotalPrice(products)
-	utils.PrintHeader("Store total price: ")
-	fmt.Printf("%.2f$\n", storeTotalPrice)
+	menu.ShowAllProducts(products)
+	menu.ShowProductById(products, 3)
+	menu.ShowProductsByPriceMin(products, 100.0)
+	menu.ShowMoreExpensiveProduct(products)
+	menu.ShowLessExpensiveProduct(products)
+	menu.ShowStoreTotalPrice(products)
 }
