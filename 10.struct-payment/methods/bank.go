@@ -13,7 +13,7 @@ func NewBank() Bank {
 
 func (c Bank) Pay(usd int) int {
 	fmt.Println("Pay with bank")
-	fmt.Println("Usd: ", usd)
+	fmt.Println("Usd: ", usd, " usd")
 
 	return rand.Int()
 }

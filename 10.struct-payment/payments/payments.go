@@ -11,7 +11,7 @@ type PaymentModule struct {
 	paymentMethod PaymentMethod
 }
 
-func newPaymentModule(paymentMethod PaymentMethod) *PaymentModule {
+func NewPaymentModule(paymentMethod PaymentMethod) *PaymentModule {
 	return &PaymentModule{
 		paymentsInfo:  make(map[int]PaymentInfo),
 		paymentMethod: paymentMethod,

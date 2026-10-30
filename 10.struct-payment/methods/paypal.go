@@ -13,7 +13,7 @@ func NewPayPal() PayPal {
 
 func (c PayPal) Pay(usd int) int {
 	fmt.Println("Pay with paypal")
-	fmt.Println("Usd: ", usd)
+	fmt.Println("Usd: ", usd, " usd")
 
 	return rand.Int()
 }
