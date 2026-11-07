@@ -2,24 +2,35 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
-func postman(text string, done chan bool) {
+func postman(wg *sync.WaitGroup, text string) {
+	defer wg.Done()
 	for i := 1; i <= 3; i++ {
 		fmt.Printf("Postman, delivered %s, %d time\n", text, i)
 		time.Sleep(750 * time.Millisecond)
 	}
-
-	done <- true
 }
 
 func main() {
-	done := make(chan bool)
+	wg := &sync.WaitGroup{}
 
-	go postman("New York", done)
-	go postman("Moscow", done)
+	wg.Add(1)
+	go postman(wg, "New York")
 
-	<-done
-	<-done
+	wg.Add(1)
+	go postman(wg, "Moscow")
+
+	wg.Add(1)
+	go postman(wg, "Canada")
+
+	wg.Add(1)
+	go postman(wg, "Tokio")
+
+	wg.Add(1)
+	go postman(wg, "London")
+
+	wg.Wait()
 }
