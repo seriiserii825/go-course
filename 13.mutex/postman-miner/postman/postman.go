@@ -12,15 +12,15 @@ func Postman(ctx context.Context, wg *sync.WaitGroup, transferPoint chan<- strin
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("Posman nr:", n, "End job")
+			fmt.Println("Posman nr:", n, "Закончил работу")
 			return
 		default:
-			fmt.Println("Mailer nr:", n, "got letter")
+			fmt.Println("Mailer nr:", n, "Взял письмо")
 			time.Sleep(1 * time.Second)
-			fmt.Println("Mailer nr:", n, "Letter to house")
+			fmt.Println("Mailer nr:", n, "Донес письмо до почты", mail)
 
 			transferPoint <- mail
-			fmt.Println("Mailer nr:", n, "give mail", mail)
+			fmt.Println("Mailer nr:", n, "Передал письмо", mail)
 		}
 	}
 }
