@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"sync/atomic"
+	"time"
 )
 
 var money = atomic.Int64{}
@@ -27,6 +28,7 @@ func payHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if money.Load() >= int64(paymentAmount) {
+		time.Sleep(3 * time.Second) // Simulate processing time
 		money.Add(-int64(paymentAmount))
 		fmt.Println("Payment successful. Remaining balance:", money.Load())
 	} else {
@@ -52,9 +54,12 @@ func saveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if money.Load() >= int64(saveAmount) {
+		time.Sleep(3 * time.Second) // Simulate processing time
 		money.Add(-int64(saveAmount))
 		bank.Add(int64(saveAmount))
-		fmt.Println("Saved amount:", saveAmount, "Remaining balance:", money.Load(), "Bank balance:", bank.Load())
+		fmt.Println("Saved amount:", saveAmount)
+		fmt.Println("Remaining balance:", money.Load())
+		fmt.Println("Bank balance:", bank.Load())
 	} else {
 		fmt.Println("Insufficient funds to save. Current balance:", money.Load())
 	}
@@ -62,7 +67,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	money.Add(1000)
+	money.Add(50)
 	http.HandleFunc("/pay", payHandler)
 	http.HandleFunc("/save", saveHandler)
 
