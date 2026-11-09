@@ -12,7 +12,7 @@ func Miner(ctx context.Context, wg *sync.WaitGroup, transferPoint chan<- int, n 
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("Miner nr:", n, "Завершил работу")
+			fmt.Println("Miner nr:", n, "------------- Завершил работу -------------")
 			return
 		default:
 			fmt.Println("Miner nr:", n, "Начал добывать уголь", power)

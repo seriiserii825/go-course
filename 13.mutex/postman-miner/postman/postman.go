@@ -12,7 +12,7 @@ func Postman(ctx context.Context, wg *sync.WaitGroup, transferPoint chan<- strin
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("Posman nr:", n, "Закончил работу")
+			fmt.Println("Posman nr:", n, "------------- Закончил работу -------------")
 			return
 		default:
 			fmt.Println("Mailer nr:", n, "Взял письмо")
