@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Postman(ctx context.Context, wg *sync.WaitGroup, transferPoint chan<- string, n int, mail string) {
+func postman(ctx context.Context, wg *sync.WaitGroup, transferPoint chan<- string, n int, mail string) {
 	defer wg.Done()
 	for {
 		select {
@@ -31,7 +31,7 @@ func PostmanPool(ctx context.Context, postmanCount int) <-chan string {
 
 	for i := 1; i <= postmanCount; i++ {
 		wg.Add(1)
-		go Postman(ctx, wg, mailTransferPoint, i, postmanToMail(i))
+		go postman(ctx, wg, mailTransferPoint, i, postmanToMail(i))
 	}
 	go func() {
 		wg.Wait()

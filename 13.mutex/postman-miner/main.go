@@ -16,7 +16,7 @@ func main() {
 	var mails []string
 	mtx := sync.Mutex{}
 
-	workersCount := 200
+	workersCount := 4
 
 	minerContext, minerCancel := context.WithCancel(context.Background())
 	postmanContext, postmanCancel := context.WithCancel(context.Background())
