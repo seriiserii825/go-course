@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/seriiserii825/go-course/14.http/todo-list/todo"
 )
 
@@ -57,6 +57,7 @@ func (h *HttpHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) 
 	if err := taskDto.ValidateForCreate(); err != nil {
 		errDto := NewErrorDto(err.Error())
 		http.Error(w, errDto.ToString(), http.StatusBadRequest)
+		return
 	}
 
 	todoTask := todo.NewTask(taskDto.Title, taskDto.Description)
@@ -98,7 +99,28 @@ failed:
   - response body: JSON with error + time
 */
 func (h *HttpHandlers) HandleGetTask(w http.ResponseWriter, r *http.Request) {
+	title := mux.Vars(r)["title"]
+	task, err := h.todoList.GetTask(title)
+	if err != nil {
+		errDto := NewErrorDto(err.Error())
 
+		if errors.Is(err, todo.ErrTaskNotFound) {
+			http.Error(w, errDto.ToString(), http.StatusNotFound)
+		} else {
+			http.Error(w, errDto.ToString(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	b, err := json.Marshal(task)
+	if err != nil {
+		panic(err)
+	}
+	w.WriteHeader(http.StatusOK)
+	if _, err := w.Write(b); err != nil {
+		fmt.Println("failed to write response:", err)
+		return
+	}
 }
 
 /*
@@ -114,7 +136,16 @@ failed:
   - response body: JSON with error + time
 */
 func (h *HttpHandlers) HandleGetAllTasks(w http.ResponseWriter, r *http.Request) {
-
+	tasks := h.todoList.ListTasks()
+	b, err := json.Marshal(tasks)
+	if err != nil {
+		panic(err)
+	}
+	w.WriteHeader(http.StatusOK)
+	if _, err := w.Write(b); err != nil {
+		fmt.Println("failed to write response:", err)
+		return
+	}
 }
 
 func (h *HttpHandlers) HandleAllUncompletedTasks(w http.ResponseWriter, r *http.Request) {
