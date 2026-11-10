@@ -42,7 +42,7 @@ failed:
   - status code: 400, 409, 500
   - response body: JSON with error + time
 */
-func (h *HttpHandlers) HandleNewTask(w http.ResponseWriter, r *http.Request) {
+func (h *HttpHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) {
 
 }
 
