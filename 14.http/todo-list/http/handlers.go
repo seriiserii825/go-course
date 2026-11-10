@@ -167,5 +167,13 @@ failed:
   - response body: JSON with error + time
 */
 func (h *HttpHandlers) HandleDeleteTask(w http.ResponseWriter, r *http.Request) {
-
+	title := mux.Vars(r)["title"]
+	if err := h.todoList.DeleteTask(title); err != nil {
+		status := http.StatusInternalServerError
+		if errors.Is(err, todo.ErrTaskNotFound) {
+			status = http.StatusNotFound
+		}
+		writeError(w, status, err)
+		return
+	}
 }
