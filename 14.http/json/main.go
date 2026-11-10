@@ -3,18 +3,24 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/k0kubun/pp/v3"
 )
 
 type Payment struct {
-	Description string `json:"description"`
-	USD         int    `json:"usd"`
-	FullName    string `json:"fullName"`
-	Address     string `json:"address"`
+	Description string    `json:"description"`
+	USD         int       `json:"usd"`
+	FullName    string    `json:"fullName"`
+	Address     string    `json:"address"`
+	Time        time.Time `json:"time"`
+}
+
+type HttpResponse struct {
+	Money          int       `json:"money"`
+	PaymentHistory []Payment `json:"paymentHistory"`
 }
 
 var mtx = sync.Mutex{}
@@ -29,15 +35,31 @@ func payHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	payment.Time = time.Now()
 
 	mtx.Lock()
 	if money-payment.USD >= 0 {
 		money -= payment.USD
 		paymentHistory = append(paymentHistory, payment)
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Payment successful"))
 		pp.Println("Payment successful:", payment)
 		pp.Println("Remaining money:", money)
+
+		HttpResponse := HttpResponse{
+			Money:          money,
+			PaymentHistory: paymentHistory,
+		}
+		b, err := json.Marshal(HttpResponse)
+		if err != nil {
+			fmt.Println("Error marshalling response:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		if _, err := w.Write(b); err != nil {
+			fmt.Println("Error writing response:", err)
+			return
+		}
 	} else {
 		w.WriteHeader(http.StatusPaymentRequired)
 		w.Write([]byte("Insufficient funds"))
