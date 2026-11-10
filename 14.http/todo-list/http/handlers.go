@@ -1,7 +1,9 @@
 package http
 
 import (
+	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/seriiserii825/go-course/14.http/todo-list/todo"
 )
@@ -43,7 +45,23 @@ failed:
   - response body: JSON with error + time
 */
 func (h *HttpHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) {
+	var taskDto TaskDto
+	if err := json.NewDecoder(r.Body).Decode(&taskDto); err != nil {
+		errDto := ErrorDto{
+			Message: err.Error(),
+			Time:    time.Now(),
+		}
+		http.Error(w, errDto.ToString(), http.StatusBadRequest)
+		return
+	}
 
+	if err := taskDto.ValidateForCreate(); err != nil {
+		errDto := ErrorDto{
+			Message: err.Error(),
+			Time:    time.Now(),
+		}
+		http.Error(w, errDto.ToString(), http.StatusBadRequest)
+	}
 }
 
 /*
