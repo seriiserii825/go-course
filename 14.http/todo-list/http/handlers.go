@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -76,6 +77,18 @@ func (h *HttpHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) 
 		} else {
 			http.Error(w, errDto.ToString(), http.StatusInternalServerError)
 		}
+		return
+	}
+
+	b, err := json.Marshal(todoTask)
+	if err != nil {
+		panic(err)
+	}
+
+	w.WriteHeader((http.StatusCreated))
+	if _, err := w.Write(b); err != nil {
+		fmt.Println("failed to write response:", err)
+		return
 	}
 }
 
