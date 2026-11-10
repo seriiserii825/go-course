@@ -48,7 +48,9 @@ failed:
 */
 func (h *HttpHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) {
 	var taskDto TaskDto
-	if err := json.NewDecoder(r.Body).Decode(&taskDto); err != nil {
+	dec := json.NewDecoder(r.Body)
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(&taskDto); err != nil {
 		writeError(w, http.StatusBadRequest, fmt.Errorf("failed to decode request body: %w", err))
 		return
 	}
@@ -122,9 +124,16 @@ func (h *HttpHandlers) HandleAllUncompletedTasks(w http.ResponseWriter, r *http.
 	writeJSON(w, http.StatusOK, uncompletedTasks)
 }
 
+func (h *HttpHandlers) HandleAllCompletedTasks(w http.ResponseWriter, r *http.Request) {
+	completedTasks := h.todoList.ListCompletedTasks()
+	writeJSON(w, http.StatusOK, completedTasks)
+}
+
 func (h *HttpHandlers) HandleCompleteTask(w http.ResponseWriter, r *http.Request) {
 	var completeDto CompleteTaskDto
-	if err := json.NewDecoder(r.Body).Decode(&completeDto); err != nil {
+	dec := json.NewDecoder(r.Body)
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(&completeDto); err != nil {
 		writeError(w, http.StatusBadRequest, fmt.Errorf("failed to decode request body: %w", err))
 		return
 	}

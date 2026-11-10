@@ -7,7 +7,7 @@ import (
 )
 
 type CompleteTaskDto struct {
-	Complete bool `json:"complete"`
+	Complete bool `json:"completed"`
 }
 
 type TaskDto struct {

@@ -3,12 +3,12 @@ package todo
 import "time"
 
 type Task struct {
-	Title       string
-	Description string
-	Completed   bool
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Completed   bool   `json:"completed"`
 
-	CreatedAt   time.Time
-	CompletedAt *time.Time
+	CreatedAt   time.Time  `json:"created_at"`
+	CompletedAt *time.Time `json:"completed_at,omitempty"`
 }
 
 func NewTask(title string, description string) Task {
