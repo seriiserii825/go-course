@@ -49,40 +49,26 @@ failed:
 func (h *HttpHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) {
 	var taskDto TaskDto
 	if err := json.NewDecoder(r.Body).Decode(&taskDto); err != nil {
-		errDto := NewErrorDto(err.Error())
-		http.Error(w, errDto.ToString(), http.StatusBadRequest)
+		writeError(w, http.StatusBadRequest, fmt.Errorf("failed to decode request body: %w", err))
 		return
 	}
 
 	if err := taskDto.ValidateForCreate(); err != nil {
-		errDto := NewErrorDto(err.Error())
-		http.Error(w, errDto.ToString(), http.StatusBadRequest)
+		writeError(w, http.StatusBadRequest, err)
 		return
 	}
 
 	todoTask := todo.NewTask(taskDto.Title, taskDto.Description)
 	if err := h.todoList.AddTask(todoTask); err != nil {
-
-		errDto := NewErrorDto(err.Error())
-
+		status := http.StatusInternalServerError
 		if errors.Is(err, todo.ErrTaskAlreadyExists) {
-			http.Error(w, errDto.ToString(), http.StatusConflict)
-		} else {
-			http.Error(w, errDto.ToString(), http.StatusInternalServerError)
+			status = http.StatusConflict
 		}
+		writeError(w, status, err)
 		return
 	}
 
-	b, err := json.Marshal(todoTask)
-	if err != nil {
-		panic(err)
-	}
-
-	w.WriteHeader((http.StatusCreated))
-	if _, err := w.Write(b); err != nil {
-		fmt.Println("failed to write response:", err)
-		return
-	}
+	writeJSON(w, http.StatusCreated, todoTask)
 }
 
 /*
@@ -102,25 +88,16 @@ func (h *HttpHandlers) HandleGetTask(w http.ResponseWriter, r *http.Request) {
 	title := mux.Vars(r)["title"]
 	task, err := h.todoList.GetTask(title)
 	if err != nil {
-		errDto := NewErrorDto(err.Error())
+		status := http.StatusInternalServerError
 
 		if errors.Is(err, todo.ErrTaskNotFound) {
-			http.Error(w, errDto.ToString(), http.StatusNotFound)
-		} else {
-			http.Error(w, errDto.ToString(), http.StatusInternalServerError)
+			status = http.StatusNotFound
 		}
+		writeError(w, status, err)
 		return
 	}
 
-	b, err := json.Marshal(task)
-	if err != nil {
-		panic(err)
-	}
-	w.WriteHeader(http.StatusOK)
-	if _, err := w.Write(b); err != nil {
-		fmt.Println("failed to write response:", err)
-		return
-	}
+	writeJSON(w, http.StatusOK, task)
 }
 
 /*
@@ -137,22 +114,42 @@ failed:
 */
 func (h *HttpHandlers) HandleGetAllTasks(w http.ResponseWriter, r *http.Request) {
 	tasks := h.todoList.ListTasks()
-	b, err := json.Marshal(tasks)
-	if err != nil {
-		panic(err)
-	}
-	w.WriteHeader(http.StatusOK)
-	if _, err := w.Write(b); err != nil {
-		fmt.Println("failed to write response:", err)
-		return
-	}
+	writeJSON(w, http.StatusOK, tasks)
 }
 
 func (h *HttpHandlers) HandleAllUncompletedTasks(w http.ResponseWriter, r *http.Request) {
-
+	uncompletedTasks := h.todoList.ListUncompletedTasks()
+	writeJSON(w, http.StatusOK, uncompletedTasks)
 }
 
 func (h *HttpHandlers) HandleCompleteTask(w http.ResponseWriter, r *http.Request) {
+	var completeDto CompleteTaskDto
+	if err := json.NewDecoder(r.Body).Decode(&completeDto); err != nil {
+		writeError(w, http.StatusBadRequest, fmt.Errorf("failed to decode request body: %w", err))
+		return
+	}
+
+	title := mux.Vars(r)["title"]
+	var (
+		task todo.Task
+		err  error
+	)
+
+	if completeDto.Complete {
+		task, err = h.todoList.CompleteTask(title)
+	} else {
+		task, err = h.todoList.UncompleteTask(title)
+	}
+	if err != nil {
+		status := http.StatusInternalServerError
+		if errors.Is(err, todo.ErrTaskNotFound) {
+			status = http.StatusNotFound
+		}
+		writeError(w, status, err)
+		return
+	}
+
+	writeJSON(w, http.StatusOK, task)
 
 }
 

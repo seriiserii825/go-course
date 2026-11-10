@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+type CompleteTaskDto struct {
+	Complete bool `json:"complete"`
+}
+
 type TaskDto struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
