@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -61,6 +62,20 @@ func (h *HttpHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) 
 			Time:    time.Now(),
 		}
 		http.Error(w, errDto.ToString(), http.StatusBadRequest)
+	}
+
+	todoTask := todo.NewTask(taskDto.Title, taskDto.Description)
+	if err := h.todoList.AddTask(todoTask); err != nil {
+		errDto := ErrorDto{
+			Message: err.Error(),
+			Time:    time.Now(),
+		}
+
+		if errors.Is(err, todo.ErrTaskAlreadyExists) {
+			http.Error(w, errDto.ToString(), http.StatusConflict)
+		} else {
+			http.Error(w, errDto.ToString(), http.StatusInternalServerError)
+		}
 	}
 }
 
