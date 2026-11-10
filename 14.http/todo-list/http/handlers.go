@@ -49,28 +49,20 @@ failed:
 func (h *HttpHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) {
 	var taskDto TaskDto
 	if err := json.NewDecoder(r.Body).Decode(&taskDto); err != nil {
-		errDto := ErrorDto{
-			Message: err.Error(),
-			Time:    time.Now(),
-		}
+		errDto := NewErrorDto(err.Error())
 		http.Error(w, errDto.ToString(), http.StatusBadRequest)
 		return
 	}
 
 	if err := taskDto.ValidateForCreate(); err != nil {
-		errDto := ErrorDto{
-			Message: err.Error(),
-			Time:    time.Now(),
-		}
+		errDto := NewErrorDto(err.Error())
 		http.Error(w, errDto.ToString(), http.StatusBadRequest)
 	}
 
 	todoTask := todo.NewTask(taskDto.Title, taskDto.Description)
 	if err := h.todoList.AddTask(todoTask); err != nil {
-		errDto := ErrorDto{
-			Message: err.Error(),
-			Time:    time.Now(),
-		}
+
+		errDto := NewErrorDto(err.Error())
 
 		if errors.Is(err, todo.ErrTaskAlreadyExists) {
 			http.Error(w, errDto.ToString(), http.StatusConflict)

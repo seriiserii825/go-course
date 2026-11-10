@@ -33,3 +33,10 @@ func (e ErrorDto) ToString() string {
 	}
 	return string(b)
 }
+
+func NewErrorDto(message string) ErrorDto {
+	return ErrorDto{
+		Message: message,
+		Time:    time.Now(),
+	}
+}
