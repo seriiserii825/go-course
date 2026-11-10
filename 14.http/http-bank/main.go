@@ -13,7 +13,16 @@ var bank = 0
 var mtx = sync.Mutex{}
 
 func payHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPatch {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
 	httpRequestBody, err := io.ReadAll(r.Body)
+	httpMethod := r.Method
+	fmt.Println(httpMethod, "httpMethod")
+	for key, value := range r.Header {
+		fmt.Println("key: ", key, "=> value: ", value)
+	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		msg := "Error reading request body: " + err.Error()
